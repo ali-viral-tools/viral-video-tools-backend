@@ -187,7 +187,10 @@ def api_download():
                                     "web_embedded",
                                     "web",
                                 ],
-                            }
+                            },
+                "youtubepot-bgutilscript": {
+                    "server_home": ["/app/bgutil-ytdlp-pot-provider/server"],
+                },
                         },
             "postprocessors": [],
         }
