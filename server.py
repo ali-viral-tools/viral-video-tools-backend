@@ -188,7 +188,7 @@ def api_cobalt_test():
         return jsonify(error="Invalid video ID."), 400
     try:
         import urllib.request, urllib.error, json as _json
-        _payload = _json.dumps({"url": "https://www.youtube.com/watch?v=" + video_id, "vCodec": "h264", "vQuality": "360", "filenameStyle": "basic", "downloadMode": "auto"}).encode()
+        _payload = _json.dumps({"url": "https://www.youtube.com/watch?v=" + video_id, "youtubeVideoCodec": "h264", "videoQuality": "360", "filenameStyle": "basic", "downloadMode": "auto"}).encode()
         _req = urllib.request.Request("https://api.cobalt.tools/", data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with urllib.request.urlopen(_req, timeout=60) as _resp:
             _body = _resp.read().decode(errors="replace")[:2000]
@@ -248,14 +248,14 @@ def api_download():
         _cobalt_payload = {"url": "https://www.youtube.com/watch?v=" + video_id, "filenameStyle": "basic"}
         if fmt_key.startswith("mp4-"):
             _cobalt_payload["downloadMode"] = "auto"
-            _cobalt_payload["vCodec"] = "h264"
-            _cobalt_payload["vQuality"] = fmt_key.split("-", 1)[1]
+            _cobalt_payload["youtubeVideoCodec"] = "h264"
+            _cobalt_payload["videoQuality"] = fmt_key.split("-", 1)[1]
         elif fmt_key in ("mp3-320", "mp3-128"):
             _cobalt_payload["downloadMode"] = "audio"
-            _cobalt_payload["aFormat"] = "mp3"
+            _cobalt_payload["audioFormat"] = "mp3"
         else:
             _cobalt_payload["downloadMode"] = "audio"
-            _cobalt_payload["aFormat"] = "best"
+            _cobalt_payload["audioFormat"] = "best"
         _cobalt_req = _urllib_request.Request("https://api.cobalt.tools/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with _urllib_request.urlopen(_cobalt_req, timeout=30) as _cobalt_resp:
             _cobalt_data = _json.loads(_cobalt_resp.read().decode("utf-8"))
