@@ -193,6 +193,8 @@ def api_cobalt_test():
         with urllib.request.urlopen(_req, timeout=60) as _resp:
             _body = _resp.read().decode(errors="replace")[:2000]
             return jsonify(http_status=_resp.status, body=_body)
+    except urllib.error.HTTPError as e:
+                return jsonify(http_status=e.code, body=e.read().decode(errors="replace")[:2000])
     except Exception as exc:
         return jsonify(error=str(exc)[:2000]), 500        
 @app.get("/api/diag")
