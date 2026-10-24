@@ -161,7 +161,7 @@ def api_formats():
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False, process=False)
         fmts = [{"format_id": f.get("format_id"), "ext": f.get("ext"), "height": f.get("height"), "vcodec": f.get("vcodec"), "acodec": f.get("acodec")} for f in (info.get("formats") or [])]
-        return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.__version__, format_count=len(fmts), formats=fmts[:60])
+        return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.version.__version__, format_count=len(fmts), formats=fmts[:60])
     except Exception as exc:
         return jsonify(error=str(exc)), 500
 @app.post("/api/download")
