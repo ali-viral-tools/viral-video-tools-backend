@@ -227,55 +227,56 @@ def api_download():
     token = secrets.token_urlsafe(16)
     job_dir = DL_DIR / token
     job_dir.mkdir(parents=True)
-        # Cobalt first: try the public Cobalt API before yt-dlp.
-        try:
-                    import json as _json
-                    import urllib.request as _urllib_request
-                    _cobalt_payload = {"url": "https://www.youtube.com/watch?v=" + video_id, "filenameStyle": "basic"}
-                    if fmt_key.startswith("mp4-"):
-                                    _cobalt_payload["downloadMode"] = "auto"
-                                    _cobalt_payload["vCodec"] = "h264"
-                                    _cobalt_payload["vQuality"] = fmt_key.split("-", 1)[1]
-                    elif fmt_key in ("mp3-320", "mp3-128"):
-                                    _cobalt_payload["downloadMode"] = "audio"
-                                    _cobalt_payload["aFormat"] = "mp3"
-                    else:
-                                    _cobalt_payload["downloadMode"] = "audio"
-                                    _cobalt_payload["aFormat"] = "best"
-                                _cobalt_req = _urllib_request.Request("https://api.cobalt.tools/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json"}, method="POST")
+    # Cobalt first: try the public Cobalt API before yt-dlp.
+    try:
+        import json as _json
+        import urllib.request as _urllib_request
+        _cobalt_payload = {"url": "https://www.youtube.com/watch?v=" + video_id, "filenameStyle": "basic"}
+        if fmt_key.startswith("mp4-"):
+            _cobalt_payload["downloadMode"] = "auto"
+            _cobalt_payload["vCodec"] = "h264"
+            _cobalt_payload["vQuality"] = fmt_key.split("-", 1)[1]
+        elif fmt_key in ("mp3-320", "mp3-128"):
+            _cobalt_payload["downloadMode"] = "audio"
+            _cobalt_payload["aFormat"] = "mp3"
+        else:
+            _cobalt_payload["downloadMode"] = "audio"
+            _cobalt_payload["aFormat"] = "best"
+        _cobalt_req = _urllib_request.Request("https://api.cobalt.tools/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json"}, method="POST")
         with _urllib_request.urlopen(_cobalt_req, timeout=30) as _cobalt_resp:
-                        _cobalt_data = _json.loads(_cobalt_resp.read().decode("utf-8"))
-                    _cobalt_url = None
+            _cobalt_data = _json.loads(_cobalt_resp.read().decode("utf-8"))
+        _cobalt_url = None
         _cobalt_name = None
         if _cobalt_data.get("status") in ("stream", "redirect"):
-                        _cobalt_url = _cobalt_data.get("url")
-                        _cobalt_name = _cobalt_data.get("filename")
+            _cobalt_url = _cobalt_data.get("url")
+            _cobalt_name = _cobalt_data.get("filename")
         elif _cobalt_data.get("status") == "picker":
             _picker = _cobalt_data.get("picker") or []
             if _picker:
-                                _cobalt_url = _picker[0].get("url")
-                        if _cobalt_url:
-                                        _safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", str(_cobalt_name)) if _cobalt_name else ""
-                                        if not _safe_name:
-                                                            _safe_name = video_id + "." + spec["ext"]
-                                                        _cobalt_path = job_dir / _safe_name
-            _cobalt_req2 = _urllib_request.Request(_cobalt_url, headers={"User-Agent": "Mozilla/5.0"})
-            with _urllib_request.urlopen(_cobalt_req2, timeout=180) as _cobalt_stream, open(_cobalt_path, "wb") as _cobalt_out:
-                                while True:
-                                                        _chunk = _cobalt_stream.read(1024 * 1024)
-                                                        if not _chunk:
-                                                                                    break
-                                                                                _cobalt_out.write(_chunk)
-            if _cobalt_path.is_file() and _cobalt_path.stat().st_size > 0:
-                                return jsonify(downloadUrl=f"/dl/{token}/{_cobalt_path.name}")
-            _cobalt_path.unlink(missing_ok=True)
+                _cobalt_url = _picker[0].get("url")
+        if _cobalt_url:
+            _safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", str(_cobalt_name)) if _cobalt_name else ""
+                                if not _safe_name:
+                                _safe_name = video_id + "." + spec["ext"]
+        _cobalt_path = job_dir / _safe_name
+        _cobalt_req2 = _urllib_request.Request(_cobalt_url, headers={"User-Agent": "Mozilla/5.0"})
+        with _urllib_request.urlopen(_cobalt_req2, timeout=180) as _cobalt_stream, open(_cobalt_path, "wb") as _cobalt_out:
+            while True:
+                _chunk = _cobalt_stream.read(1024 * 1024)
+                if not _chunk:
+                    break
+                _cobalt_out.write(_chunk)
+        if _cobalt_path.is_file() and _cobalt_path.stat().st_size > 0:
+            return jsonify(downloadUrl=f"/dl/{token}/{_cobalt_path.name}")
+        _cobalt_path.unlink(missing_ok=True)
 except Exception:
-        try:
-                        if "_cobalt_path" in locals() and _cobalt_path.is_file():
-                                            _cobalt_path.unlink(missing_ok=True)
+try:
+    if "_cobalt_path" in locals() and _cobalt_path.is_file():
+        _cobalt_path.unlink(missing_ok=True)
 except Exception:
-            pass
-
+    pass
+        
+        
     try:
         from yt_dlp import YoutubeDL
 
@@ -293,7 +294,7 @@ except Exception:
 
 
 
-
+            
 
 
 
