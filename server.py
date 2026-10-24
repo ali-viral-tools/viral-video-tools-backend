@@ -256,7 +256,7 @@ def api_download():
                 _cobalt_url = _picker[0].get("url")
         if _cobalt_url:
             _safe_name = re.sub(r"[^A-Za-z0-9._-]", "_", str(_cobalt_name)) if _cobalt_name else ""
-                                if not _safe_name:
+            if not _safe_name:
                                 _safe_name = video_id + "." + spec["ext"]
         _cobalt_path = job_dir / _safe_name
         _cobalt_req2 = _urllib_request.Request(_cobalt_url, headers={"User-Agent": "Mozilla/5.0"})
