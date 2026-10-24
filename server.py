@@ -159,7 +159,7 @@ def api_formats():
             shutil.copyfile(_cookie_path, "/tmp/cookies.txt")
             ydl_opts["cookiefile"] = "/tmp/cookies.txt"
         with YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False)
+            info = ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False, process=False)
         fmts = [{"format_id": f.get("format_id"), "ext": f.get("ext"), "height": f.get("height"), "vcodec": f.get("vcodec"), "acodec": f.get("acodec")} for f in (info.get("formats") or [])]
         return jsonify(title=info.get("title"), format_count=len(fmts), formats=fmts[:60])
     except Exception as exc:
