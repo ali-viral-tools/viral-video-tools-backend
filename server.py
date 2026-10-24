@@ -209,7 +209,7 @@ def api_download():
             "socket_timeout": 30,
                         "extractor_args": {
                             "youtube": {
-                                "player_client": ["android"],
+                                "player_client": ["android", "ios", "tv", "mweb"],
                             },
                         },
             "postprocessors": [],
