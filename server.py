@@ -156,6 +156,8 @@ def api_download():
     try:
         from yt_dlp import YoutubeDL
 
+        import os as _os
+        _cookie_path = _os.environ.get("YT_COOKIES_PATH", "/etc/secrets/cookies.txt")
         ydl_opts = {
             "format": spec["ydl"],
             "outtmpl": str(job_dir / "%(title).80s.%(ext)s"),
@@ -194,6 +196,8 @@ def api_download():
                         },
             "postprocessors": [],
         }
+        if _os.path.exists(_cookie_path):
+            ydl_opts["cookiefile"] = _cookie_path
         if spec["ext"] == "mp4":
             ydl_opts["postprocessors"].append(
                 {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}
