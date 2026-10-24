@@ -66,11 +66,11 @@ VIDEO_ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
 # Maps the front-end dropdown values to yt-dlp format selectors.
 # "audio": (codec, quality) -> convert with FFmpeg after download.
 FORMATS = {
-    "mp4-1080": {"ydl": "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=1080]+bestaudio/best[height<=1080]/best", "audio": None, "ext": "mp4"},
-    "mp4-720":  {"ydl": "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=720]+bestaudio/best[height<=720]/best",  "audio": None, "ext": "mp4"},
-    "mp4-480":  {"ydl": "bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=480]+bestaudio/best[height<=480]/best",  "audio": None, "ext": "mp4"},
-    "mp4-360":  {"ydl": "bestvideo[height<=360][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=360]+bestaudio/best[height<=360]/best",  "audio": None, "ext": "mp4"},
-    "mp4-144":  {"ydl": "bestvideo[height<=144][ext=mp4]+bestaudio[ext=m4a]/bestvideo[height<=144]+bestaudio/best[height<=144]/best",  "audio": None, "ext": "mp4"},
+    "mp4-1080": {"ydl": "bestvideo+bestaudio/best", "audio": None, "ext": "mp4"},
+    "mp4-720":  {"ydl": "bestvideo+bestaudio/best",  "audio": None, "ext": "mp4"},
+    "mp4-480":  {"ydl": "bestvideo+bestaudio/best",  "audio": None, "ext": "mp4"},
+    "mp4-360":  {"ydl": "bestvideo+bestaudio/best",  "audio": None, "ext": "mp4"},
+    "mp4-144":  {"ydl": "bestvideo+bestaudio/best",  "audio": None, "ext": "mp4"},
     "mp3-320":  {"ydl": "bestaudio/best", "audio": ("mp3", "320K"), "ext": "mp3"},
     "mp3-128":  {"ydl": "bestaudio/best", "audio": ("mp3", "128K"), "ext": "mp3"},
     "m4a":      {"ydl": "bestaudio/best", "audio": ("m4a", None),   "ext": "m4a"},
