@@ -188,8 +188,8 @@ def api_download():
                                     "web",
                                 ],
                             },
-                "youtubepot-bgutilscript": {
-                    "server_home": ["/app/bgutil-ytdlp-pot-provider/server"],
+                "youtubepot-bgutilhttp": {
+                    "base_url": ["http://127.0.0.1:4416"],
                 },
                         },
             "postprocessors": [],
