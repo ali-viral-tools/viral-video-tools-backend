@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#7C5CFF" />
+<meta name="description" content="Fast, clean and mobile-friendly YouTube Video Downloader. Paste a link, choose quality, and download." />
+<title>YT Downloader — Fast & Free</title>
+<style>
+  :root{
+    --violet:#7C5CFF;
+    --violet-dark:#6846E8;
+    --violet-soft:#EFEAFF;
+    --green:#22C55E;
+    --green-dark:#16A34A;
+    --green-soft:#E8F9EE;
+    --bg:#F7F7FB;
+    --card:#FFFFFF;
+    --text:#171321;
+    --muted:#6B7280;
+    --border:#E9E7F2;
+    --radius:20px;
+    --shadow:0 10px 30px rgba(124,92,255,.12);
+}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+    min-height:100dvh;
+}
+  a{color:var(--violet);text-decoration:none}
+  .app{max-width:520px;margin:0 auto;padding:16px 16px 28px}
+  .ad-slot{width:100%;min-height:0}
+  .ad-slot:empty{min-height:90px;border:1.5px dashed #DDD6FE;border-radius:14px;background:#fff}
+  #ad-bottom{margin-top:20px}
+  #ad-top{margin-bottom:16px}
+  .header{text-align:center;padding:14px 0 18px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .logo{
+    width:56px;height:56px;margin:0 auto 12px;border-radius:16px;
+    background:linear-gradient(135deg,var(--violet),#9B7BFF);
+    display:grid;place-items:center;color:#fff;font-size:26px;
+    box-shadow:var(--shadow);
+}
+  .header h1{font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+  .header h1 span{color:var(--violet)}
+  .header p{color:var(--muted);font-size:15px;margin-top:6px;padding:0 8px}
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+    background:var(--green-soft);color:var(--green-dark);
+    font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;
+  }
+  .badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+  .card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:20px 18px;
+    box-shadow:0 4px 24px rgba(0,0,0,.04);
+}
+  .label{font-size:13px;font-weight:700;letter-spacing:.02em;margin-bottom:8px;display:block}
+  .input-wrap{position:relative}
+  .input-wrap input{
+    width:100%;height:54px;border:2px solid var(--border);border-radius:14px;
+    padding:0 44px 0 14px;font-size:16px;outline:none;background:#FCFCFF;
+    transition:border-color .2s, box-shadow .2s;color:var(--text);
+}
+  .input-wrap input:focus{border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-soft);background:#fff}
+  .input-wrap input::placeholder{color:#9CA3AF}
+  .clear-btn{
+    position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    width:32px;height:32px;border:none;border-radius:50%;background:#F3F4F6;
+    font-size:16px;cursor:pointer;display:none;place-items:center;color:#6B7280;
+}
+  .clear-btn.show{display:grid}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:7px}
+  .row{margin-top:16px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  select{
+    width:100%;height:54px;border:2px solid var(--border);border-radius:14px;
+    padding:0 14px;font-size:16px;background:#FCFCFF;color:var(--text);
+    outline:none;appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%237C5CFF' stroke-width='2.5'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;
+}
+  select:focus{border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-soft);background-color:#fff}
+  .btn{
+    width:100%;height:56px;margin-top:18px;border:none;border-radius:14px;
+    background:linear-gradient(135deg,var(--green),#2ED573);
+    color:#fff;font-size:17px;font-weight:800;letter-spacing:.01em;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+    box-shadow:0 8px 20px rgba(34,197,94,.28);transition:transform .15s, opacity .2s, box-shadow .2s;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn:disabled{opacity:.65;cursor:not-allowed;box-shadow:none}
+  .btn .spin{
+    width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);
+    border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;
+      }
+  .btn.loading .spin{display:block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .preview{display:none;margin-top:18px;border-top:1px solid var(--border);padding-top:16px}
+  .preview.show{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .thumb{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:#111;display:block}
+  .preview h3{font-size:15px;line-height:1.4;margin-top:12px;font-weight:700}
+  .meta{font-size:13px;color:var(--muted);margin-top:4px;word-break:break-all}
+  .pill{
+    display:inline-block;margin-top:10px;background:var(--violet-soft);color:var(--violet-dark);
+    font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .status{display:none;margin-top:14px;padding:12px 14px;border-radius:12px;font-size:14px;font-weight:600}
+  .status.show{display:block}
+  .status.error{background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA}
+  .status.success{background:var(--green-soft);color:#15803D;border:1px solid #BBF7D0}
+  .status.info{background:var(--violet-soft);color:var(--violet-dark);border:1px solid #DDD6FE}
+  .features{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+  .feature{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px 8px;text-align:center}
+  .feature .icon{font-size:22px;margin-bottom:6px}
+  .feature strong{display:block;font-size:13px}
+  .feature span{font-size:12px;color:var(--muted)}
+  .steps{margin-top:20px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+  .steps h2{font-size:16px;margin-bottom:12px}
+  .steps ol{padding-left:20px;color:#374151;font-size:14.5px}
+  .steps li+li{margin-top:6px}
+  .footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:20px;line-height:1.6;padding:0 10px}
+  @media (max-width:360px){
+    .header h1{font-size:24px}
+    .features{grid-template-columns:1fr}
+      }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#12101A;--card:#1C1929;--text:#F9FAFB;--muted:#9CA3AF;--border:#2E2A45;--violet-soft:#2A2445}
+    .input-wrap input,select{background:#171426}
+    .input-wrap input:focus,select:focus{background:#1C1929}
+    .feature,.steps{background:#1C1929}
+    .ad-slot:empty{background:#1C1929}
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <div id="ad-top" class="ad-slot ad-top"><!-- AD SLOT: TOP --></div>
+  <header class="header">
+    <div class="logo" aria-hidden="true">▶</div>
+    <h1>YouTube <span>Downloader</span></h1>
+    <p>Paste a video link, pick your quality, and download in seconds. No sign-up needed.</p>
+    <span class="badge">Free • Fast • No Watermark</span>
+  </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <section class="card" aria-label="Download form">
+    <form id="downloadForm" novalidate>
+      <label class="label" for="videoUrl">YouTube Video URL</label>
+      <div class="input-wrap">
+        <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url" required />
+        <button type="button" class="clear-btn" id="clearBtn" aria-label="Clear URL">×</button>
+      </div>
+      <p class="hint">Supports youtube.com, youtu.be, Shorts &amp; Music links.</p>
+      <div class="row">
+        <label class="label" for="formatSelect">Format &amp; Quality</label>
+        <select id="formatSelect">
+          <optgroup label="Video — MP4">
+            <option value="mp4-1080" selected>MP4 — 1080p Full HD</option>
+            <option value="mp4-720">MP4 — 720p HD</option>
+            <option value="mp4-480">MP4 — 480p</option>
+            <option value="mp4-360">MP4 — 360p</option>
+            <option value="mp4-144">MP4 — 144p (Smallest)</option>
+          </optgroup>
+          <optgroup label="Audio Only">
+            <option value="mp3-320">MP3 — 320 kbps (Best)</option>
+            <option value="mp3-128">MP3 — 128 kbps</option>
+            <option value="m4a">M4A — Audio Only</option>
+          </optgroup>
+        </select>
+      </div>
+      <button type="submit" class="btn" id="downloadBtn">
+        <span class="spin" aria-hidden="true"></span>
+        <span id="btnText">⬇ Download Video</span>
+      </button>
+      <div class="status" id="statusBox" role="status" aria-live="polite"></div>
+    </form>
+    <div class="preview" id="preview">
+      <img class="thumb" id="thumb" alt="Video thumbnail" loading="lazy" />
+      <h3 id="previewTitle">Video ready to download</h3>
+      <p class="meta" id="previewId"></p>
+      <span class="pill" id="previewFormat"></span>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <section class="features" aria-label="Features">
+    <div class="feature"><div class="icon">⚡</div><strong>Super Fast</strong><span>Light &amp; instant</span></div>
+    <div class="feature"><div class="icon">📱</div><strong>Mobile First</strong><span>Works on any phone</span></div>
+    <div class="feature"><div class="icon">🔒</div><strong>Safe &amp; Clean</strong><span>No sign-up</span></div>
+  </section>
+  <section class="steps">
+    <h2>How to download</h2>
+    <ol>
+      <li>Copy the link from the YouTube app or browser.</li>
+      <li>Paste it in the box above.</li>
+      <li>Choose a format, tap <strong>Download Video</strong>, and save your file.</li>
+    </ol>
+  </section>
+  <div id="ad-bottom" class="ad-slot ad-bottom"><!-- AD SLOT: BOTTOM --></div>
+  <footer class="footer">
+    <p>For personal use only. Please respect creators' rights and YouTube's Terms of Service.<br />© 2026 YT Downloader. All rights reserved.</p>
+  </footer>
+</main>
+<script>
+(function () {
+  "use strict";
+  var form    = document.getElementById("downloadForm");
+  var input   = document.getElementById("videoUrl");
+  var select  = document.getElementById("formatSelect");
+  var btn     = document.getElementById("downloadBtn");
+  var btnText = document.getElementById("btnText");
+  var clearBtn= document.getElementById("clearBtn");
+  var status  = document.getElementById("statusBox");
+  var preview = document.getElementById("preview");
+  var thumb   = document.getElementById("thumb");
+  var pId     = document.getElementById("previewId");
+  var pFormat = document.getElementById("previewFormat");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function getVideoId(url) {
+    if (!url) return null;
+    url = url.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+    var patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/|youtube\.com\/live\/|music\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+      /[?&]v=([a-zA-Z0-9_-]{11})/
+    ];
+    for (var i = 0; i < patterns.length; i++) {
+      var m = url.match(patterns[i]);
+      if (m) return m[1];
+    }
+    return null;
+    }
+  function showStatus(type, message) {
+    status.className = "status show " + type;
+    status.textContent = message;
+}
+  function hideStatus() {
+    status.className = "status";
+    status.textContent = "";
+}
+  input.addEventListener("input", function () {
+    clearBtn.classList.toggle("show", !!input.value);
+    hideStatus();
+    var id = getVideoId(input.value);
+    if (id) {
+      thumb.src = "https://i.ytimg.com/vi/" + id + "/hqdefault.jpg";
+      pId.textContent = "Video ID: " + id + " • youtube.com/watch?v=" + id;
+      pFormat.textContent = select.options[select.selectedIndex].text;
+      preview.classList.add("show");
+} else {
+      preview.classList.remove("show");
+}
+});
+  clearBtn.addEventListener("click", function () {
+    input.value = "";
+    clearBtn.classList.remove("show");
+    preview.classList.remove("show");
+    hideStatus();
+    input.focus();
+});
+  select.addEventListener("change", function () {
+    if (preview.classList.contains("show")) {
+      pFormat.textContent = select.options[select.selectedIndex].text;
+}
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var id = getVideoId(input.value);
+    if (!input.value.trim()) {
+      showStatus("error", "Please paste a YouTube video URL first.");
+      input.focus();
+      return;
+}
+    if (!id) {
+      showStatus("error", "That doesn't look like a valid YouTube link. Please check it and try again.");
+      input.focus();
+      return;
+}
+    btn.disabled = true;
+    btn.classList.add("loading");
+    btnText.textContent = "Preparing download...";
+    showStatus("info", "Fetching your video in " + select.options[select.selectedIndex].text + " ...");
+    fetch("/api/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ videoId: id, format: select.value })
+})
+    .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+    .then(function (res) {
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      btnText.textContent = "⬇ Download Video";
+      if (res.ok && res.d.downloadUrl) {
+        showStatus("success", "✓ Your download is starting...");
+        window.location.href = res.d.downloadUrl;
+} else {
+        showStatus("error", "✕ " + (res.d.error || "Download failed. Please try another video."));
+}
+})
+    .catch(function () {
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      btnText.textContent = "⬇ Download Video";
+      showStatus("error", "✕ Couldn't reach the download server. Is the backend running?");
+});
+});
+})();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
