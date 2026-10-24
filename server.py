@@ -270,11 +270,11 @@ def api_download():
             return jsonify(downloadUrl=f"/dl/{token}/{_cobalt_path.name}")
         _cobalt_path.unlink(missing_ok=True)
     except Exception:
-    try:
-        if "_cobalt_path" in locals() and _cobalt_path.is_file():
-            _cobalt_path.unlink(missing_ok=True)
-    except Exception:
-        pass
+        try:
+            if "_cobalt_path" in locals() and _cobalt_path.is_file():
+                _cobalt_path.unlink(missing_ok=True)
+        except Exception:
+            pass
         
         
     try:
