@@ -158,10 +158,27 @@ def api_formats():
         if _os.path.exists(_cookie_path):
             shutil.copyfile(_cookie_path, "/tmp/cookies.txt")
             ydl_opts["cookiefile"] = "/tmp/cookies.txt"
+            cookie_file_exists = True
+            cookie_names = []
+            cookie_count = 0
+            cookie_load_error = None
+            try:
+                import http.cookiejar
+                _jar = http.cookiejar.MozillaCookieJar("/tmp/cookies.txt")
+                _jar.load(ignore_discard=True, ignore_expires=True)
+                cookie_names = [c.name for c in _jar]
+                cookie_count = len(cookie_names)
+            except Exception as _cookie_exc:
+                cookie_load_error = str(_cookie_exc)
+        else:
+            cookie_file_exists = False
+            cookie_names = []
+            cookie_count = 0
+            cookie_load_error = None
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False, process=False)
         fmts = [{"format_id": f.get("format_id"), "ext": f.get("ext"), "height": f.get("height"), "vcodec": f.get("vcodec"), "acodec": f.get("acodec")} for f in (info.get("formats") or [])]
-        return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.version.__version__, format_count=len(fmts), formats=fmts[:60])
+        return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.version.__version__, format_count=len(fmts), formats=fmts[:60], cookie_file_exists=cookie_file_exists, cookie_names=cookie_names, **({"cookie_count": cookie_count} if cookie_load_error is None else {"cookie_load_error": cookie_load_error}))
     except Exception as exc:
         return jsonify(error=str(exc)), 500
 @app.post("/api/download")
