@@ -181,6 +181,20 @@ def api_formats():
         return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.version.__version__, format_count=len(fmts), formats=fmts[:60], cookie_file_exists=cookie_file_exists, cookie_names=cookie_names, **({"cookie_count": cookie_count} if cookie_load_error is None else {"cookie_load_error": cookie_load_error}))
     except Exception as exc:
         return jsonify(error=str(exc)), 500
+@app.get("/api/cobalt-test")
+def api_cobalt_test():
+    video_id = str(request.args.get("videoId", "")).strip()
+    if not VIDEO_ID_RE.match(video_id):
+        return jsonify(error="Invalid video ID."), 400
+    try:
+        import urllib.request, urllib.error, json as _json
+        _payload = _json.dumps({"url": "https://www.youtube.com/watch?v=" + video_id, "vCodec": "h264", "vQuality": "360", "filenameStyle": "basic", "downloadMode": "auto"}).encode()
+        _req = urllib.request.Request("https://api.cobalt.tools/", data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(_req, timeout=60) as _resp:
+            _body = _resp.read().decode(errors="replace")[:2000]
+            return jsonify(http_status=_resp.status, body=_body)
+    except Exception as exc:
+        return jsonify(error=str(exc)[:2000]), 500        
 @app.get("/api/diag")
 def api_diag():
     video_id = str(request.args.get("videoId", "")).strip()
