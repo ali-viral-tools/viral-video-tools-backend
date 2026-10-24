@@ -178,13 +178,17 @@ def api_download():
             "quiet": True,
             "no_warnings": True,
             "socket_timeout": 30,
-            "retries": 3,
-            "extractor_args": {
-                "youtube": {
-                    "player_client": ["android", "ios", "web"],
-                    "player_skip": ["webpage"],
-                },
-            },
+                        "extractor_args": {
+                            "youtube": {
+                                "player_client": [
+                                    "ios",
+                                    "android",
+                                    "tv_embedded",
+                                    "web_embedded",
+                                    "web",
+                                ],
+                            }
+                        },
             "postprocessors": [],
         }
         if spec["ext"] == "mp4":
