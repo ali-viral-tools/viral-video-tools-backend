@@ -4,3 +4,5 @@ yt-dlp>=2025.1.1
 bgutil-ytdlp-pot-provider
 
 
+
+yt-dlp-ytse
