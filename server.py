@@ -186,7 +186,7 @@ def api_diag():
         video_id = str(request.args.get("videoId", "")).strip()
         if not VIDEO_ID_RE.match(video_id):
                     return jsonify(error="Invalid video ID."), 400
-                try:
+    try:
                             from yt_dlp import YoutubeDL
                             import os as _os, io, logging
                             _cookie_path = _os.environ.get("YT_COOKIES_PATH", "/etc/secrets/cookies.txt")
