@@ -189,7 +189,7 @@ def api_cobalt_test():
     try:
         import urllib.request, urllib.error, json as _json
         _payload = _json.dumps({"url": "https://www.youtube.com/watch?v=" + video_id, "vCodec": "h264", "vQuality": "360", "filenameStyle": "basic", "downloadMode": "auto"}).encode()
-        _req = urllib.request.Request("https://api.cobalt.tools/", data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json"}, method="POST")
+        _req = urllib.request.Request("https://api.cobalt.tools/", data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with urllib.request.urlopen(_req, timeout=60) as _resp:
             _body = _resp.read().decode(errors="replace")[:2000]
             return jsonify(http_status=_resp.status, body=_body)
@@ -256,7 +256,7 @@ def api_download():
         else:
             _cobalt_payload["downloadMode"] = "audio"
             _cobalt_payload["aFormat"] = "best"
-        _cobalt_req = _urllib_request.Request("https://api.cobalt.tools/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json"}, method="POST")
+        _cobalt_req = _urllib_request.Request("https://api.cobalt.tools/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with _urllib_request.urlopen(_cobalt_req, timeout=30) as _cobalt_resp:
             _cobalt_data = _json.loads(_cobalt_resp.read().decode("utf-8"))
         _cobalt_url = None
@@ -273,7 +273,7 @@ def api_download():
             if not _safe_name:
                                 _safe_name = video_id + "." + spec["ext"]
         _cobalt_path = job_dir / _safe_name
-        _cobalt_req2 = _urllib_request.Request(_cobalt_url, headers={"User-Agent": "Mozilla/5.0"})
+        _cobalt_req2 = _urllib_request.Request(_cobalt_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"})
         with _urllib_request.urlopen(_cobalt_req2, timeout=180) as _cobalt_stream, open(_cobalt_path, "wb") as _cobalt_out:
             while True:
                 _chunk = _cobalt_stream.read(1024 * 1024)
