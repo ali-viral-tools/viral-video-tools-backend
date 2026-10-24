@@ -256,7 +256,7 @@ def api_download():
             "no_warnings": True,
             "socket_timeout": 30,
                         "extractor_args": {
-                "youtube": {"player_client": ["web_safari"]},
+                "youtube": {"player_client": ["mweb"], "formats": ["sabr"]},
                         },
             "postprocessors": [],
         }
