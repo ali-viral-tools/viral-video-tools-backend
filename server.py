@@ -209,11 +209,8 @@ def api_download():
             "socket_timeout": 30,
                         "extractor_args": {
                             "youtube": {
-                                "player_client": ["web"],
+                                "player_client": ["android],
                             },
-                "youtubepot-bgutilhttp": {
-                    "base_url": ["http://127.0.0.1:4416"],
-                },
                         },
             "postprocessors": [],
         }
