@@ -197,7 +197,9 @@ def api_download():
             "postprocessors": [],
         }
         if _os.path.exists(_cookie_path):
-            ydl_opts["cookiefile"] = _cookie_path
+            _tmp_cookies = "/tmp/cookies.txt"
+            shutil.copyfile(_cookie_path, _tmp_cookies)
+            ydl_opts["cookiefile"] = _tmp_cookies
         if spec["ext"] == "mp4":
             ydl_opts["postprocessors"].append(
                 {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}
