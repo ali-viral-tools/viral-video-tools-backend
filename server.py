@@ -208,7 +208,7 @@ def api_download():
             "no_warnings": True,
             "socket_timeout": 30,
                         "extractor_args": {
-                            "youtube": {
+                            "youtube":" {
                                 "player_client": ["android],
                             },
                         },
