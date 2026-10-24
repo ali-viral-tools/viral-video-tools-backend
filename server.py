@@ -181,6 +181,37 @@ def api_formats():
         return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.version.__version__, format_count=len(fmts), formats=fmts[:60], cookie_file_exists=cookie_file_exists, cookie_names=cookie_names, **({"cookie_count": cookie_count} if cookie_load_error is None else {"cookie_load_error": cookie_load_error}))
     except Exception as exc:
         return jsonify(error=str(exc)), 500
+@app.get("/api/diag")
+def api_diag():
+        video_id = str(request.args.get("videoId", "")).strip()
+        if not VIDEO_ID_RE.match(video_id):
+                    return jsonify(error="Invalid video ID."), 400
+                try:
+                            from yt_dlp import YoutubeDL
+                            import os as _os, io, logging
+                            _cookie_path = _os.environ.get("YT_COOKIES_PATH", "/etc/secrets/cookies.txt")
+                            _buf = io.StringIO()
+                            class _H(logging.Handler):
+                                            def emit(self, record):
+                                                                _buf.write(self.format(record) + "\n")
+                                                        _h = _H()
+                                        _h.setFormatter(logging.Formatter("%(message)s"))
+        _logger = logging.getLogger("yt-dlp")
+        _logger.addHandler(_h)
+        _logger.setLevel(logging.DEBUG)
+        ydl_opts = {"quiet": False, "verbose": True, "no_warnings": False, "socket_timeout": 30, "extractor_args": {"youtube": {}}, "logger": _logger}
+        if _os.path.exists(_cookie_path):
+                        shutil.copyfile(_cookie_path, "/tmp/cookies.txt")
+            ydl_opts["cookiefile"] = "/tmp/cookies.txt"
+        with YoutubeDL(ydl_opts) as ydl:
+                        info = ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False, process=False)
+        _logger.removeHandler(_h)
+        _log = _buf.getvalue()
+        # Return only safe lines: playability, client, format, error, storyboard lines, last 80 lines total, with no cookie values. Strip any line containing "cookie" case-insensitively except a count line.
+        _lines = [l for l in _log.splitlines() if "cookie" not in l.lower()]
+        return jsonify(title=info.get("title"), playability=(info.get("playability") or {}), format_count=len(info.get("formats") or []), log_tail=_lines[-80:])
+except Exception as exc:
+        return jsonify(error=str(exc)), 500
 @app.post("/api/download")
 def api_download():
     data = request.get_json(silent=True) or {}
