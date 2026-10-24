@@ -144,6 +144,7 @@ def api_formats():
         return jsonify(error="Invalid video ID."), 400
     try:
         from yt_dlp import YoutubeDL
+        import yt_dlp
         import os as _os
         _cookie_path = _os.environ.get("YT_COOKIES_PATH", "/etc/secrets/cookies.txt")
         ydl_opts = {
@@ -151,8 +152,7 @@ def api_formats():
             "no_warnings": True,
             "socket_timeout": 30,
             "extractor_args": {
-                "youtube": {"player_client": ["web"]},
-                "youtubepot-bgutilhttp": {"base_url": ["http://127.0.0.1:4416"]},
+                "youtube": {},
             },
         }
         if _os.path.exists(_cookie_path):
@@ -161,7 +161,7 @@ def api_formats():
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info("https://www.youtube.com/watch?v=" + video_id, download=False, process=False)
         fmts = [{"format_id": f.get("format_id"), "ext": f.get("ext"), "height": f.get("height"), "vcodec": f.get("vcodec"), "acodec": f.get("acodec")} for f in (info.get("formats") or [])]
-        return jsonify(title=info.get("title"), format_count=len(fmts), formats=fmts[:60])
+        return jsonify(title=info.get("title"), yt_dlp_version=yt_dlp.__version__, format_count=len(fmts), formats=fmts[:60])
     except Exception as exc:
         return jsonify(error=str(exc)), 500
 @app.post("/api/download")
