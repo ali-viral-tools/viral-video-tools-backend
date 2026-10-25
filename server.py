@@ -185,7 +185,7 @@ def api_formats():
 def api_cobalt_test():
     video_id = str(request.args.get("videoId", "")).strip()
     instance = str(request.args.get("instance", "https://api.cobalt.tools/")).strip()
-    if instance not in ("https://api.cobalt.tools/", "https://api.meowing.de/", "https://cobalt.meowing.de/", "https://cobalt.canine.tools/", "https://co.wuk.sh/", "https://bergung-api.hoffnungfuerdiezukunft.net/", "https://cobalt-alpha.wolfy.love/", "https://apicobalt.girlskissing.top/", "https://nuko-c.meowing.de/", "https://cobalt-api.lamps-dev.dev/", "https://cobaltapi.kittycat.boo/", "https://cobaltapi.squair.xyz/", "https://api.qwkuns.me/"):
+    if instance not in ("https://api.cobalt.tools/", "https://api.meowing.de/", "https://cobalt.meowing.de/", "https://cobalt.canine.tools/", "https://co.wuk.sh/", "https://bergung-api.hoffnungfuerdiezukunft.net/", "https://cobalt-alpha.wolfy.love/", "https://apicobalt.girlskissing.top/", "https://nuko-c.meowing.de/", "https://cobalt-api.lamps-dev.dev/", "https://cobaltapi.kittycat.boo/", "https://cobaltapi.squair.xyz/", "https://api.qwkuns.me/", "https://rue-cobalt.xenon.zone/", "https://cobaltapi.cjs.nz/", "https://api-cobalt.eversiege.network/", "https://capi.3kh0.net/", "https://kitty.tame.gg/"):
         return jsonify(error="Invalid instance."), 400
     if not VIDEO_ID_RE.match(video_id):
         return jsonify(error="Invalid video ID."), 400
