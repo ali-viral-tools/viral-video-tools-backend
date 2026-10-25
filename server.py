@@ -184,12 +184,15 @@ def api_formats():
 @app.get("/api/cobalt-test")
 def api_cobalt_test():
     video_id = str(request.args.get("videoId", "")).strip()
+    instance = str(request.args.get("instance", "https://api.cobalt.tools/")).strip()
+    if instance not in ("https://api.cobalt.tools/", "https://api.meowing.de/", "https://cobalt.meowing.de/", "https://cobalt.canine.tools/", "https://co.wuk.sh/"):
+        return jsonify(error="Invalid instance."), 400
     if not VIDEO_ID_RE.match(video_id):
         return jsonify(error="Invalid video ID."), 400
     try:
         import urllib.request, urllib.error, json as _json
         _payload = _json.dumps({"url": "https://www.youtube.com/watch?v=" + video_id, "youtubeVideoCodec": "h264", "videoQuality": "360", "filenameStyle": "basic", "downloadMode": "auto"}).encode()
-        _req = urllib.request.Request("https://api.cobalt.tools/", data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
+        _req = urllib.request.Request("instance data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with urllib.request.urlopen(_req, timeout=60) as _resp:
             _body = _resp.read().decode(errors="replace")[:2000]
             return jsonify(http_status=_resp.status, body=_body)
