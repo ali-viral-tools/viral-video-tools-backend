@@ -200,6 +200,27 @@ def api_cobalt_test():
                 return jsonify(http_status=e.code, body=e.read().decode(errors="replace")[:2000])
     except Exception as exc:
         return jsonify(error=str(exc)[:2000]), 500        
+@app.get("/api/cobalt-dl-test")
+def api_cobalt_dl_test():
+    video_id = str(request.args.get("videoId", "")).strip()
+    if not VIDEO_ID_RE.match(video_id):
+        return jsonify(error="Invalid video ID."), 400
+    try:
+        import json as _json, urllib.request as _ur
+        _payload = {"url": "https://www.youtube.com/watch?v=" + video_id, "filenameStyle": "basic", "downloadMode": "auto", "youtubeVideoCodec": "h264", "videoQuality": "360"}
+        _req = _ur.Request("https://rue-cobalt.xenon.zone/", data=_json.dumps(_payload).encode(), headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
+        with _ur.urlopen(_req, timeout=30) as _resp:
+            _data = _json.loads(_resp.read().decode())
+        _url = _data.get("url") if _data.get("status") in ("stream", "redirect", "tunnel") else None
+        if not _url:
+            return jsonify(api_status=_data.get("status"), api_error=_data.get("error"), filename=_data.get("filename"))
+        _req2 = _ur.Request(_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"})
+        with _ur.urlopen(_req2, timeout=60) as _stream:
+            _first = _stream.read(1024)
+            _headers = dict(_stream.headers)
+        return jsonify(api_status=_data.get("status"), filename=_data.get("filename"), tunnel_ok=True, first_bytes=len(_first), content_type=_headers.get("Content-Type"), content_length=_headers.get("Content-Length"))
+    except Exception as exc:
+        return jsonify(error=str(exc)[:2000]), 500
 @app.get("/api/diag")
 def api_diag():
     video_id = str(request.args.get("videoId", "")).strip()
