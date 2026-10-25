@@ -192,7 +192,7 @@ def api_cobalt_test():
     try:
         import urllib.request, urllib.error, json as _json
         _payload = _json.dumps({"url": "https://www.youtube.com/watch?v=" + video_id, "youtubeVideoCodec": "h264", "videoQuality": "360", "filenameStyle": "basic", "downloadMode": "auto"}).encode()
-        _req = urllib.request.Request("instance data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
+        _req = urllib.request.Request(instance, data=_payload, headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with urllib.request.urlopen(_req, timeout=60) as _resp:
             _body = _resp.read().decode(errors="replace")[:2000]
             return jsonify(http_status=_resp.status, body=_body)
