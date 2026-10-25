@@ -261,12 +261,12 @@ def api_download():
         else:
             _cobalt_payload["downloadMode"] = "audio"
             _cobalt_payload["audioFormat"] = "best"
-        _cobalt_req = _urllib_request.Request("https://api.cobalt.tools/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
+        _cobalt_req = _urllib_request.Request("https://rue-cobalt.xenon.zone/", data=_json.dumps(_cobalt_payload).encode("utf-8"), headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}, method="POST")
         with _urllib_request.urlopen(_cobalt_req, timeout=30) as _cobalt_resp:
             _cobalt_data = _json.loads(_cobalt_resp.read().decode("utf-8"))
         _cobalt_url = None
         _cobalt_name = None
-        if _cobalt_data.get("status") in ("stream", "redirect"):
+        if _cobalt_data.get("status") in ("stream", "redirect", "tunnel"):
             _cobalt_url = _cobalt_data.get("url")
             _cobalt_name = _cobalt_data.get("filename")
         elif _cobalt_data.get("status") == "picker":
